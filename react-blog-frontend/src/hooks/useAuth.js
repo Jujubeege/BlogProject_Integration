@@ -20,7 +20,7 @@ export function useAuth() {
       setIsLoading(true); // Sets loading state to true to indicate registration is in progress
       // Send a POST request to the API endpoint for user registration
       const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/auth/register`, // API endpoint URL
+        `${import.meta.env.API_GATEWAY}/api/auth/register`, // API endpoint URL
         credentials // User registration credentials (e.g., name, email, password)
       );
 
@@ -43,7 +43,7 @@ export function useAuth() {
     try {
       setIsLoading(true); // Sets loading state to true during login
       const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/auth/login`,
+        `${import.meta.env.API_GATEWAY}/api/auth/login`,
         credentials
       ); // Sends login request to API
 

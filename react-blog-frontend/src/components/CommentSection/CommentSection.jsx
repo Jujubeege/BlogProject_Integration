@@ -17,13 +17,38 @@ function CommentSection({ postId }) {
     // Define an asynchronous function to fetch comments from the API.  Asynchronous functions allow you to work with promises and await their resolution.  This makes asynchronous code easier to read and reason about.
     const fetchComments = async () => {
       // TODO
-                // Access the authentication token from localStorage. If the token does not exist, alert the user and halt further execution.
-                // Use the postId to construct the API URL. This URL should point to the endpoint responsible for fetching comments.
-                // Make a GET request to the API with the token included in the Authorization header.
-                // Parse the response data and update the component's comments state with the fetched data.
-                // Handle any errors during the request gracefully, logging them for debugging purposes.
+      try {
+        const { token } = JSON.parse(localStorage.getItem("auth_user") || "{}");
+        if (!token) {
+          alert("Authentication token not found. Please log in.");
+          return;
+        }
 
-      setComments([]);
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/api/comments/${postId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch posts.");
+        }
+
+        const data = await response.json();
+
+        setComments(data);
+      } catch (error) {
+        // Log and display error message if fetching fails
+        console.error("Error fetching comments:", error);
+        alert(error.message || "An error occurred while fetching comments.");
+      }
+      // Access the authentication token from localStorage. If the token does not exist, alert the user and halt further execution.
+      // Use the postId to construct the API URL. This URL should point to the endpoint responsible for fetching comments.
+      // Make a GET request to the API with the token included in the Authorization header.
+      // Parse the response data and update the component's comments state with the fetched data.
+      // Handle any errors during the request gracefully, logging them for debugging purposes.
     };
 
     // Call the fetchComments function to initiate the comment fetching process.
@@ -33,14 +58,13 @@ function CommentSection({ postId }) {
 
   // Function to handle adding a new comment
   const handleAddComment = async (e) => {
-  //  TODO
-          // Access the authentication token and the user ID from localStorage. If the token is missing, notify the user to log in.
-          // Construct the API endpoint using the postId.
-          // Use a POST request to send the new comment content to the server. Ensure the content is properly formatted in JSON.
-          // If the API call is successful, add the new comment to the comments state.
-          // Clear the input field after successfully adding the comment.
-          // Handle any errors gracefully, displaying user-friendly error messages.
-
+    //  TODO
+    // Access the authentication token and the user ID from localStorage. If the token is missing, notify the user to log in.
+    // Construct the API endpoint using the postId.
+    // Use a POST request to send the new comment content to the server. Ensure the content is properly formatted in JSON.
+    // If the API call is successful, add the new comment to the comments state.
+    // Clear the input field after successfully adding the comment.
+    // Handle any errors gracefully, displaying user-friendly error messages.
   };
 
   // Function to handle editing an existing comment
@@ -54,26 +78,23 @@ function CommentSection({ postId }) {
   // Function to handle updating an existing comment
   const handleUpdateComment = async (e) => {
     // TODO
-          // Retrieve the authentication token from localStorage. If the token is missing, alert the user.
-          // Use the editComment state to get the comment's ID and construct the API URL for the specific comment.
-          // Send a PUT request to the API with the updated comment content in the body.
-          // If successful, update the corresponding comment in the comments state to reflect the changes.
-          // Clear the edit mode by resetting the editComment and newComment states.
-          // Ensure error handling is robust, with clear messages for the user in case of failure.
-
+    // Retrieve the authentication token from localStorage. If the token is missing, alert the user.
+    // Use the editComment state to get the comment's ID and construct the API URL for the specific comment.
+    // Send a PUT request to the API with the updated comment content in the body.
+    // If successful, update the corresponding comment in the comments state to reflect the changes.
+    // Clear the edit mode by resetting the editComment and newComment states.
+    // Ensure error handling is robust, with clear messages for the user in case of failure.
   };
 
   // Function to handle deleting a comment
   const handleDeleteComment = async (commentId, commentAuthorId) => {
     // TODO
-            // Access the authentication token and current user ID from localStorage.
-            // Ensure that the user is authorized to delete the comment (e.g., they are the author or the post owner).
-            // Use the comment's ID to construct the API URL.
-            // Send a DELETE request to the API with the token in the Authorization header.
-            // If successful, remove the deleted comment from the comments state to update the UI.
-            // Handle any errors, providing meaningful feedback to the user.
-
-
+    // Access the authentication token and current user ID from localStorage.
+    // Ensure that the user is authorized to delete the comment (e.g., they are the author or the post owner).
+    // Use the comment's ID to construct the API URL.
+    // Send a DELETE request to the API with the token in the Authorization header.
+    // If successful, remove the deleted comment from the comments state to update the UI.
+    // Handle any errors, providing meaningful feedback to the user.
   };
 
   // Function to toggle the visibility of the comments section
@@ -121,7 +142,6 @@ function CommentSection({ postId }) {
       )
     );
   };
-
 
   // Return the JSX to render the comment section component
   return (

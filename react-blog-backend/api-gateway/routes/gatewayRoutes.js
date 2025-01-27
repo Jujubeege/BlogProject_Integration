@@ -131,8 +131,6 @@ router.use("/posts", protect, async (req, res) => {
 // TODO
 // Implement /likes route to handle comment functionality
 
-
-
 // Fallback route for any unmatched requests. This route will handle any request that doesn't match any of the defined routes above.  This acts like a 404 error handler
 router.all("*", (req, res) => {
   logger.error(`Unhandled route: ${req.method} ${req.originalUrl}`); // Log the unhandled route

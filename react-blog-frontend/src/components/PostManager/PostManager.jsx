@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 // Import CSS styles for the component from the corresponding CSS module file
 import styles from "./PostManager.module.css";
+import { useNavigate } from "react-router-dom";
 
 // Define the PostManager functional component
 function PostManager() {
@@ -16,6 +17,9 @@ function PostManager() {
   // input field value for editing
   const [editPostContent, setEditPostContent] = useState(""); // Stores the updated content of the post being edited
   // text area value for editing
+
+  // navigate
+  const navigate = useNavigate();
 
   // Function to fetch posts from the API with pagination
   const fetchPosts = async (page) => {
@@ -108,6 +112,7 @@ function PostManager() {
       // Alert user upon successful deletion and refetch posts to update the UI
       alert("Post deleted successfully.");
       fetchPosts(currentPage);
+      navigate("/posts");
     } catch (error) {
       console.error("Error deleting post:", error);
       alert(error.message || "An error occurred while deleting the post.");

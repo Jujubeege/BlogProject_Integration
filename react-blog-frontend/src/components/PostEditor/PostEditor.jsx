@@ -116,26 +116,26 @@ function PostEditor({ post = {}, isDarkMode }) {
     }));
   };
 
-// TODO Update handleSubmit Function
-    // 1: Check the condition where !formData.id is validating
-      // Remove this condition so that update functionality can also be implemented here
+  // TODO Update handleSubmit Function
+  // 1: Check the condition where !formData.id is validating
+  // Remove this condition so that update functionality can also be implemented here
 
-    // 2: Identify Where the apiUrl and method are Defined
-      // Locate the part of the handleSubmit function where the apiUrl and method variables are being defined.
+  // 2: Identify Where the apiUrl and method are Defined
+  // Locate the part of the handleSubmit function where the apiUrl and method variables are being defined.
 
-    // 3: Update the apiUrl Variable
-      // Modify the apiUrl to dynamically check if formData.id exists.
-      // If formData.id is truthy:
-        // Set the apiUrl to include the formData.id in the endpoint.
-      // If formData.id is falsy:
-        // Set the apiUrl to the base URL for creating a new post.
+  // 3: Update the apiUrl Variable
+  // Modify the apiUrl to dynamically check if formData.id exists.
+  // If formData.id is truthy:
+  // Set the apiUrl to include the formData.id in the endpoint.
+  // If formData.id is falsy:
+  // Set the apiUrl to the base URL for creating a new post.
 
-    // 4: Update the method Variable
-      // Check if formData.id exists.
-      // If formData.id is truthy:
-        // Set the method to "PUT".
-      // If formData.id is falsy:
-        // Set the method to "POST"
+  // 4: Update the method Variable
+  // Check if formData.id exists.
+  // If formData.id is truthy:
+  // Set the method to "PUT".
+  // If formData.id is falsy:
+  // Set the method to "POST"
 
   const handleSubmit = async (e) => {
     //Function to handle form submission
@@ -151,7 +151,6 @@ function PostEditor({ post = {}, isDarkMode }) {
     setErrors(newErrors); //Update the errors state with the new errors
 
     if (Object.keys(newErrors).length === 0) {
-      if (!formData.id ) {   
       // Proceed if there are no errors  Check if there are any errors after validation
       try {
         //Get the authentication token from local storage
@@ -172,9 +171,15 @@ function PostEditor({ post = {}, isDarkMode }) {
           categories: [formData.category], // Wrap category in an array as the backend expects it
         };
 
-        const apiUrl = `${import.meta.env.VITE_API_URL}/api/posts`;
+        let apiUrl = `${import.meta.env.VITE_API_URL}/api/posts`;
 
-        const method = "POST";
+        let method = "POST";
+
+        if (formData.id) {
+          method = "PUT";
+
+          apiUrl = `${import.meta.env.VITE_API_URL}/api/posts/${formData.id}`;
+        }
 
         const response = await fetch(apiUrl, {
           //Send API request to create/update post
@@ -200,7 +205,8 @@ function PostEditor({ post = {}, isDarkMode }) {
       } catch (error) {
         alert(error.message); //Display error message to user in an alert box
       }
-    }
+
+      console.log(formData.id);
     } else {
       //Alert the user to fix errors before submitting.
       alert("Please fix the errors before publishing.");
